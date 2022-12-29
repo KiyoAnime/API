@@ -11,7 +11,7 @@ interface Series {
 
 const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
     const recent: Series[] = [];
-    await axios.get('https://api.consumet.org/meta/anilist/recent-episodes?page=1&perPage=30').then(async (response) => {
+    await axios.get('https://api.consumet.org/meta/anilist/recent-episodes?page=1&perPage=30').then((response) => {
         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
         for (const result of response.data.results) recent.push({ id: parseInt(result.id), title: result.title.userPreferred, thumbnail: result.image });
     }).catch(() => {
