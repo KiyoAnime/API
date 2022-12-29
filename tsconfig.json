@@ -7,7 +7,7 @@
       	"module": "NodeNext",
      	"moduleResolution": "Node",
         "paths": {
-            "@/*": ["./*"]
+            "@/*": ["./app/*"]
         }
     },
     "exclude": ["node_modules"]
