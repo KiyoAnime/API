@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+		"strict": true,
+        "outDir": "build",
+        "sourceMap": true,
+        "target": "ES2020",
+      	"module": "NodeNext",
+     	"moduleResolution": "Node",
+        "paths": {
+            "@/*": ["./*"]
+        }
+    },
+    "exclude": ["node_modules"]
+}

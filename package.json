@@ -1,0 +1,27 @@
+{
+	"name": "kiyo-api",
+	"version": "1.0.0",
+	"main": "index.ts",
+	"repository": "https://github.com/KiyoAnime/API",
+	"author": "TheFallenSpirit <thefallenspirit@outlook.com>",
+	"license": "MIT",
+	"scripts": {
+		"dev": "ts-node . --dev",
+		"start": "node build/index.js",
+		"build": "tsc --project tsconfig.json; tsc-alias"
+	},
+	"dependencies": {
+		"@fastify/cors": "^8.2.0",
+		"axios": "^1.2.2",
+		"config": "^3.3.8",
+		"fastify": "^4.10.2"
+	},
+	"devDependencies": {
+		"@types/config": "^3.3.0",
+		"@types/node": "^18.11.18",
+		"ts-node": "^10.9.1",
+		"tsc-alias": "^1.8.2",
+		"tsconfig-paths": "^4.1.1",
+		"typescript": "^4.9.4"
+	}
+}
