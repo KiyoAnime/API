@@ -1,15 +1,17 @@
 import axios from "axios";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import serverError from "../res/serverError";
+import serverError from "@/res/serverError";
 import success from '@/res/success';
 
 interface Results {
-    id: string;
-    title: string;
-    url: string;
-    thumbnail: string;
-    releaseDate: string;
-    suborDub: string;
+    id: number;
+    title:  string;
+    image: string;
+    description: string;
+    rating: string;
+    episodes: number;
+    type: string;
+    release: string;
 }
 
 export type SearchRequest = FastifyRequest<{
@@ -19,11 +21,11 @@ export type SearchRequest = FastifyRequest<{
 const index = async (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => {
     const query = req.query.query;
     const results: Results[] = [];
-    await axios.get(`https://api.consumet.org/anime/gogoanime/${query}`).then((response) => {
+    await axios.get(`https://api.consumet.org/meta/anilist/${query}`).then((response) => {
         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
         const animes = response.data.results;
         for (const anime of animes) {
-            results.push({ id: anime.id, title: anime.title, url: anime.url, thumbnail: anime.image, releaseDate: anime.releaseDate, suborDub: anime.suborDub });
+            results.push({ id: parseInt(anime.id), title: anime.title.userPreferred,  image: anime.image, description: anime.description, rating: anime.rating, episodes: anime.totalEpisodes, type: anime.type, release: anime.releaseDate });
         };
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
