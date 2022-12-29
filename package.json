@@ -6,9 +6,9 @@
 	"author": "TheFallenSpirit <thefallenspirit@outlook.com>",
 	"license": "MIT",
 	"scripts": {
-		"dev": "ts-node . --dev",
+		"build": "tsc; tsc-alias",
 		"start": "node build/index.js",
-		"build": "tsc --project tsconfig.json; tsc-alias"
+		"dev": "node -r tsconfig-paths/register -r ts-node/register index.ts --dev"
 	},
 	"dependencies": {
 		"@fastify/cors": "^8.2.0",
