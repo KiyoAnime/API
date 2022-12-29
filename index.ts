@@ -7,6 +7,7 @@ const dev = process.argv.includes('--dev');
 dev && console.clear();
 
 const app = fastify({ logger: dev });
+app.register(require('fastify-qs'), {})
 app.register(router);
 app.register(fastifyCors, { origin: true });
 
