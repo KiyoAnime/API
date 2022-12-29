@@ -11,18 +11,15 @@ interface Series {
 
 const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
     const recent: Series[] = [];
-    await axios.get('https://api.consumet.org/meta/anilist/recent-episodes?perPage=30').then(async (response) => {
+    await axios.get('https://api.consumet.org/meta/anilist/recent-episodes?page=1&perPage=30').then(async (response) => {
         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
-        for (const result of response.data.results) {
-            const resultObj = { id: parseInt(result.id), title: result.title.userPreferred, thumbnail: result.image };
-            if (recent.some((s) => s.id === parseInt(result.id))) return;
-            if (recent.length >= 21) return;
-            recent.push(resultObj);
-        };
+        for (const result of response.data.results) recent.push({ id: parseInt(result.id), title: result.title.userPreferred, thumbnail: result.image });
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
     });
-    return success(res, recent);
+    const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()];
+    const completeRecent = filteredRecent.slice(0, 21);
+    return success(res, completeRecent);
 };
 
 export default index;
