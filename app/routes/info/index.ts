@@ -7,12 +7,15 @@ interface Anime {
     id: number;
     title: string;
     color: string;
+    adult: boolean;
     banner: string;
+    genres: string[];
     released: number;
     episodes: number;
     duration: number;
     subOrDub: string;
     thumbnail: string;
+    popularity: string;
     description: string;
 }
 
@@ -35,6 +38,9 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             released: data.releaseDate,
             episodes: data.totalEpisodes,
             duration: data.duration,
+            adult: data.isAdult,
+            popularity: data.popularity,
+            genres: data.genres
         };
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
