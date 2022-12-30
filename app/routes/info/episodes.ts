@@ -3,36 +3,23 @@ import axios from "axios";
 import { FastifyRequest, FastifyInstance, FastifyReply } from "fastify";
 
 interface Episode {
-    totalepisodes: number;
-    episodeData: EpisodeData[];
-}
-
-interface EpisodeData {
-    epno: number;
-    epid: string;
+    id: string;
+    number: number;
 }
 
 export type EpisodesRequest = FastifyRequest<{ Params: { id: string; } }>;
-
 const index = async (app: FastifyInstance, req: EpisodesRequest, res: FastifyReply) => {
     const episodes: Episode[] = [];
     const id = req.params.id;
+    let total = 0;
     await axios.get(`https://apiconsumetorg-production.up.railway.app/meta/anilist/info/${id}`).then((response) => {
         const episodesData = response.data.episodes;
-        const totalEpisodes: number = response.data.episodes.length;
-        const episodeData: EpisodeData[] = [];
+        total = response.data.episodes.length;
         for (const episode of episodesData) {
-            episodeData.push({
-                epno: parseInt(episode.id.split('-').pop()!),
-                epid: episode.id
-            });
+            episodes.push({ id: episode.id, number: parseInt(episode.id.split('-').pop()!) });
         }
-        episodes.push({
-            totalepisodes: totalEpisodes,
-            episodeData: episodeData
-        });
     });
-    return success(res, episodes);
+    return success(res, { total: total, episodes: episodes });
 };
 
 export default index;
