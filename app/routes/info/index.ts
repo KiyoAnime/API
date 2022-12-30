@@ -31,7 +31,7 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             description: data.description,
             subOrDub: data.subOrDub,
             banner: data.cover,
-            thumbnail: data.cover,
+            thumbnail: data.image,
             released: data.releaseDate,
             episodes: data.totalEpisodes,
             duration: data.duration,
