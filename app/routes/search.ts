@@ -21,7 +21,7 @@ export type SearchRequest = FastifyRequest<{
 const index = async (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => {
     const query = req.query.query;
     const results: Results[] = [];
-    await axios.get(`https://api.consumet.org/meta/anilist/${query}`).then((response) => {
+    await axios.get(`https://apiconsumetorg-production.up.railway.app/meta/anilist/${query}`).then((response) => {
         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
         const animes = response.data.results;
         for (const anime of animes) {
