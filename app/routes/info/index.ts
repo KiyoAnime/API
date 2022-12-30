@@ -12,6 +12,7 @@ interface Anime {
     episodes: number;
     duration: number;
     subOrDub: string;
+    thumbnail: string;
     description: string;
 }
 
@@ -30,9 +31,10 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             description: data.description,
             subOrDub: data.subOrDub,
             banner: data.cover,
+            thumbnail: data.cover,
             released: data.releaseDate,
             episodes: data.totalEpisodes,
-            duration: data.duration
+            duration: data.duration,
         };
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
