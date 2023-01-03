@@ -9,30 +9,30 @@ import User, { UserModel } from "@/models/User";
 
 export type RegisterRequest = FastifyRequest<{ Body: { email: string; username: string; password: string; } }>;
 export default async (app: FastifyInstance, req: RegisterRequest, res: FastifyReply) => {
-    // const xata = getXataClient();
+    const xata = getXataClient();
 
-    // await validate(xata, req, res);
-    await validateMongo(User, req, res);
+    await validate(xata, req, res);
+    //await validateMongo(User, req, res);
     const password = hashSync(req.body.password, 16);
     const uid = genId();
-    const user = await User.create({
-        _id: uid,
-        password: password,
-        ip_address: req.ip,
-        email: req.body.email,
-        username: req.body.username,
-        initial_ip_address: req.ip
-    });
-    // const user = await xata.db.users.create({
-    //     uid: uid,
+    // const user = await User.create({
+    //     _id: uid,
     //     password: password,
     //     ip_address: req.ip,
-    //     created_at: new Date,
-    //     updated_at: new Date,
     //     email: req.body.email,
-    //     username: req.body.password,
-    //     register_ip_address: req.ip
+    //     username: req.body.username,
+    //     initial_ip_address: req.ip
     // });
+    const user = await xata.db.users.create({
+        uid: uid,
+        password: password,
+        ip_address: req.ip,
+        created_at: new Date,
+        updated_at: new Date,
+        email: req.body.email,
+        username: req.body.password,
+        register_ip_address: req.ip
+    });
 
     const token = sign(uid.toString(), process.env.APP_SECRET!);
     return success(res, user, { key: 'token', value: token });
