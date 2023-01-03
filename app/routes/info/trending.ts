@@ -1,7 +1,7 @@
-import serverError from "@/res/serverError";
-import success from "@/res/success";
-import axios from "axios";
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import serverError from '@/res/serverError';
+import success from '@/res/success';
+import axios from 'axios';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 interface Trending {
     id: number;
@@ -15,6 +15,7 @@ interface Trending {
 
 const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
     const trending: Trending[] = [];
+    // prettier-ignore
     await axios.get('https://apiconsumetorg-production.up.railway.app/meta/anilist/trending').then((response) => {
         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
         for (const result of response.data.results) trending.push({
