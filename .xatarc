@@ -1,3 +1,6 @@
 {
-  "databaseURL": "https://thefallenspirit-s-workspace-t33cuv.eu-west-1.xata.sh/db/kiyotest"
+  "databaseURL": "https://thefallenspirit-s-workspace-t33cuv.eu-west-1.xata.sh/db/kiyotest",
+  "codegen": {
+    "output": "./xata.ts"
+  }
 }

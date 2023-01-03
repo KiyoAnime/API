@@ -6,7 +6,7 @@ import { info, recent, trending, episodes } from '@/routes/info';
 import { register } from '@/routes/auth';
 
 export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
-    route.post('/auth/login', { preValidation: registerVal }, (req, res) => register(route, req, res));
+    route.post('/auth/register', { preValidation: registerVal }, (req, res) => register(route, req, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));
