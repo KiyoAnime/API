@@ -9,12 +9,13 @@
         "build": "tsc; tsc-alias",
         "lint": "prettier --write .",
         "start": "node build/index.js",
-        "dev": "node -r tsconfig-paths/register -r ts-node/register index.ts --dev"
+        "dev": "node -r tsconfig-paths/register -r dotenv/register -r ts-node/register index.ts --dev"
     },
     "dependencies": {
         "@fastify/cors": "^8.2.0",
         "axios": "^1.2.2",
         "config": "^3.3.8",
+        "dotenv": "^16.0.3",
         "fastify": "^4.10.2"
     },
     "devDependencies": {
