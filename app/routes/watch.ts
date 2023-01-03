@@ -7,8 +7,8 @@ interface Episode {
     quality: string;
 }
 
-export type EpisodesRequest = FastifyRequest<{ Params: { id: string } }>;
-const index = async (app: FastifyInstance, req: EpisodesRequest, res: FastifyReply) => {
+export type WatchRequest = FastifyRequest<{ Params: { id: string } }>;
+const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply) => {
     const data: Episode[] = [];
     const id = req.params.id;
     await axios.get(`https://apiconsumetorg-production.up.railway.app/meta/anilist/watch/${id}`).then((response) => {
