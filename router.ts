@@ -1,11 +1,13 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { infoVal, watchVal, searchVal, registerVal } from '@/validation';
+import { infoVal, watchVal, searchVal } from '@/validation';
+import { checkVal, registerVal } from '@/validation/auth';
 import search from '@/routes/search';
 import watch from '@/routes/watch';
 import { info, recent, trending, episodes } from '@/routes/info';
-import { register } from '@/routes/auth';
+import { check, register } from '@/routes/auth';
 
 export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
+    route.post('/auth/check', { preValidation: checkVal }, (req, res) => check(route, req, res));
     route.post('/auth/register', { preValidation: registerVal }, (req, res) => register(route, req, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
