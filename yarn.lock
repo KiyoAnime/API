@@ -916,11 +916,6 @@
     "@types/node" "*"
     "@types/webidl-conversions" "*"
 
-"@xata.io/client@^0.21.6":
-  version "0.21.6"
-  resolved "https://registry.yarnpkg.com/@xata.io/client/-/client-0.21.6.tgz#e95e7cb428b3b8974cc02b848810bf013b4ac4cb"
-  integrity sha512-XAHQsopU8aXCwhieEGSzBgAwkBv5UKMOAxQg9oeGF6okE66QCe987j/nxsk6vYZKYgsv7cgnOikpwXbYv7oIsQ==
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
