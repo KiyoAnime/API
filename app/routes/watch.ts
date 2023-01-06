@@ -11,9 +11,10 @@ const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply)
         for (const source of rawSources) {
             await axios.get(`https://api.enime.moe/source/${source.id}`).then(async (sRes) => {
                 await axios.get(sRes.data.url).then((cRes) => {
+                    console.log(cRes.status);
                     if (cRes.status === 200) sources.push(sRes.data.url);
                 }).catch((cErr) => {
-                    if (cErr.response.status !== 200) return;
+                    if (cErr.response.status !== 200) return console.log(cErr.response);
                 });
             });
         }
