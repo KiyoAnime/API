@@ -22,7 +22,7 @@ const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply)
     await axios.get(`https://api.consumet.org/anime/gogoanime/watch/${id}`).then(async (response) => {
         if (!response.data.sources) {
             await axios.get(`https://api.consumet.org/anime/gogoanime/servers/${id}`).then((sRes) => {
-                source = { url: '', embedded: sRes.data[0].url };
+                source = { url: '', embedded: sRes.data[1].url };
             });
         } else {
             const rawSources = response.data.sources;
@@ -58,7 +58,7 @@ const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply)
         }
     }).catch(async (err) => {
         await axios.get(`https://api.consumet.org/anime/gogoanime/servers/${id}`).then((sRes) => {
-            source = { url: '', embedded: sRes.data[0].url };
+            source = { url: '', embedded: sRes.data[1].url };
         });
     });
     return success(res, source);
