@@ -12,7 +12,7 @@ const index = async (app: FastifyInstance, req: EpisodesRequest, res: FastifyRep
     const episodes: Episode[] = [];
     const id = req.params.id;
     let total = 0;
-    await axios.get(`https://api.enime.moe/mapping/anilist/${id}`).then((response) => {
+    await axios.get(`https://api.consumet.org/meta/anilist/info/${id}`).then((response) => {
         const episodesData = response.data.episodes;
         total = response.data.episodes.length;
         for (const episode of episodesData) episodes.push({ id: episode.id, number: episode.number });

@@ -4,5 +4,6 @@ import { FastifyReply, HookHandlerDoneFunction } from 'fastify';
 
 export default (req: InfoRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
+    if (!req.query.episodes) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'episodes' paramater is undefined.");
     next();
 };

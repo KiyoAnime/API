@@ -3,6 +3,11 @@ import success from '@/res/success';
 import axios from 'axios';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
+interface Episode {
+    id: string;
+    number: number;
+}
+
 interface Anime {
     id: number;
     title: string;
@@ -11,15 +16,16 @@ interface Anime {
     banner: string;
     genres: string[];
     released: number;
-    episodes: number;
     duration: number;
     subOrDub: string;
     thumbnail: string;
     popularity: string;
     description: string;
+    episodeCount: number;
+    episodes: Episode[]|undefined;
 }
 
-export type InfoRequest = FastifyRequest<{ Params: { id: string } }>;
+export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: boolean } }>;
 const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) => {
     let info: Anime | undefined;
     const id = req.params.id;
@@ -36,11 +42,12 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             banner: data.cover,
             thumbnail: data.image,
             released: data.releaseDate,
-            episodes: data.totalEpisodes,
+            episodeCount: data.totalEpisodes,
             duration: data.duration,
             adult: data.isAdult,
             popularity: data.popularity,
-            genres: data.genres
+            genres: data.genres,
+            episodes: !!req.query.episodes ? data.episodes : undefined
         };
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
