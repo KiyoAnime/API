@@ -9,8 +9,8 @@ interface UserI {
     email: string;
     username: string;
     password?: string;
-    ipAddress: string;
-    initialIpAddress: string;
+    ipAddress?: string;
+    initialIpAddress?: string;
 }
 
 export type UserModel = Model<UserI, {}, UserMethod>;
@@ -26,6 +26,8 @@ const userSchema = new Schema<UserI, UserModel, UserMethod>({
 userSchema.method('transform', function () {
     const data = this as UserI;
     delete data['password'];
+    delete data['ipAddress'];
+    delete data['initialIpAddress'];
     return data;
 });
 
