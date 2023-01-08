@@ -10,6 +10,8 @@ interface Episode {
 
 interface Anime {
     id: number;
+    mal: number;
+    type: string;
     title: string;
     color: string;
     adult: boolean;
@@ -23,6 +25,8 @@ interface Anime {
     description: string;
     episodeCount: number;
     episodes: Episode[]|undefined;
+    end: { month: number; year: number; day: number; };
+    start: { month: number; year: number; day: number; };
 }
 
 export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: boolean } }>;
@@ -46,8 +50,12 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             duration: data.duration,
             adult: data.isAdult,
             popularity: data.popularity,
+            type: data.type,
+            start: data.startDate,
+            end: data.endDate,
+            mal: data.malId,
             genres: data.genres,
-            episodes: !!req.query.episodes ? data.episodes : undefined
+            episodes: req.query.episodes === true ? data.episodes : undefined
         };
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2

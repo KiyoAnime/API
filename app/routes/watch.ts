@@ -21,7 +21,7 @@ const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply)
         } else {
             const rawSources = response.data.sources;
             for await (const src of rawSources) {
-                if (src.url.includes('vipanicdn.net')) { console.log('2') } else {
+                if (src.url.includes('vipanicdn.net')) {} else {
                     switch (src.quality) {
                         case 'default':
                             def = src.url;
