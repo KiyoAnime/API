@@ -21,7 +21,7 @@ interface Anime {
     duration: number;
     subOrDub: string;
     thumbnail: string;
-    popularity: string;
+    popularity: number;
     description: string;
     episodeCount: number;
     episodes: Episode[]|undefined;

@@ -29,5 +29,5 @@ export default async (app: FastifyInstance, req: RegisterRequest, res: FastifyRe
     });
 
     const token = sign(id.toString(), process.env.APP_SECRET!);
-    return success(res, null, { key: 'token', value: token });
+    return success(res, { key: 'token', value: token }, { key: 'token', value: token });
 };
