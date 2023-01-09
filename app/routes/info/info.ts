@@ -55,20 +55,20 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             end: data.endDate,
             mal: data.malId,
             genres: data.genres,
-            episodes: [],
+            episodes: [
+                {
+                    id: "test",
+                    number: 1,
+                }
+            ],
         };
         if (req.query.episodes) {
             for (const episode of data.episodes) {
-                if (req.query.episodes === undefined) info.episodes = [];
                 if (info.episodes === undefined) info.episodes = [];
-                if (req.query.episodes === true) {
-                    info.episodes.push({
-                        id: episode.id,
-                        number: episode.number,
-                    });
-                } else {
+                if (req.query.episodes === true)
+                    info.episodes.push({ id: episode.id, number: episode.number });
+                else 
                     info.episodes = [];
-                }
             }
         }
     }).catch(() => {
