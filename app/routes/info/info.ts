@@ -24,7 +24,7 @@ interface Anime {
     popularity: number;
     description: string;
     episodeCount: number;
-    episodes: Episode[] | undefined;
+    episodes: Episode[]|undefined;
     end: { month: number; year: number; day: number; };
     start: { month: number; year: number; day: number; };
 }
@@ -55,20 +55,16 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             end: data.endDate,
             mal: data.malId,
             genres: data.genres,
-            episodes: [
-                {
-                    id: "test",
-                    number: 1,
-                }
-            ],
+            episodes: [],
         };
         if (req.query.episodes) {
             for (const episode of data.episodes) {
+                if (req.query.episodes = false) info.episodes = [];
                 if (info.episodes === undefined) info.episodes = [];
-                if (req.query.episodes === true)
-                    info.episodes.push({ id: episode.id, number: episode.number });
-                else 
-                    info.episodes = [];
+                info.episodes.push({
+                    id: episode.id,
+                    number: episode.number,
+                });
             }
         }
     }).catch(() => {
