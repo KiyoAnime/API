@@ -9,6 +9,7 @@ export type LoginRequest = FastifyRequest<{ Body: { email: string; password: str
 export default async (app: FastifyInstance, req: LoginRequest, res: FastifyReply) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return badRequest(res, 'ERR.PARAM_INVALID', 'The provided email does not match any accounts.');
+    if (!user.password) return badRequest(res, 'ERR.PARAM_INVALID', 'The provided email does not match any accounts.');
     const passCheck = compareSync(req.body.password, user.password);
     if (!passCheck) return badRequest(res, 'ERR.PARAM_INVALID', 'Incorrect password provided.');
     const token = sign(user._id.toString(), process.env.APP_SECRET!);

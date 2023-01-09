@@ -55,8 +55,18 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
             end: data.endDate,
             mal: data.malId,
             genres: data.genres,
-            episodes: req.query.episodes === true ? data.episodes : undefined
+            episodes: [],
         };
+        if (req.query.episodes) {
+            for (const episode of data.episodes) {
+                if (req.query.episodes === undefined) info.episodes = [];
+                if (info.episodes === undefined) info.episodes = [];
+                info.episodes.push({
+                    id: episode.id,
+                    number: episode.number,
+                });
+            }
+        }
     }).catch(() => {
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
     });
