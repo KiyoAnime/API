@@ -47,7 +47,7 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
         const data = response.data;
         const watchOrder: WatchOrder[] = [];
-        await axios.get(`https://chiaki.vercel.app/get?group_id=${data.id}`).then(async(wores) => {
+        await axios.get(`https://chiaki.vercel.app/get?group_id=${data.mappings.mal}`).then(async(wores) => {
             if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Chiaki API failed. R=1'); // REASON 2
             const data = wores.data;
             for (const anime of data) {
