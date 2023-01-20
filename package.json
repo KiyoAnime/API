@@ -4,7 +4,7 @@
     "main": "index.ts",
     "repository": "https://github.com/KiyoAnime/API",
     "author": "TheFallenSpirit <thefallenspirit@outlook.com>",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "engines": {
         "node": ">=18"
     },
