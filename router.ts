@@ -1,13 +1,12 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { infoVal, watchVal, searchVal } from '@/validation';
-import { checkVal, loginVal, registerVal } from '@/validation/auth';
-import search from '@/routes/search';
-import watch from '@/routes/watch';
-import { info, recent, trending, episodes } from '@/routes/info';
-import { check, login, register } from '@/routes/auth';
-import { user, userUpdate, designUpdate } from '@/routes/user';
 import authorization from '@/middleware/authorization';
-import { userUpdateVal, designUpdateVal } from '@/validation/user';
+
+// Route Imports:
+import watch, { validation as watchVal } from '@/routes/watch';
+import search, { validation as searchVal } from '@/routes/search';
+import { info, recent, trending, infoVal } from '@/routes/info';
+import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
+import { user, userUpdate, designUpdate, userUpdateVal, designUpdateVal } from '@/routes/user';
 
 export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
@@ -21,7 +20,7 @@ export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));
     route.get('/info/:id', { preValidation: infoVal }, (req, res) => info(route, req, res));
-    route.get('/info/:id/episodes', { preValidation: infoVal }, (req, res) => episodes(route, req, res));
+    //route.get('/info/:id/episodes', { preValidation: infoVal }, (req, res) => episodes(route, req, res));
 
     route.get('/watch/:id', { preValidation: watchVal }, (req, res) => watch(route, req, res));
     route.get('/search', { preValidation: searchVal }, (req, res) => search(route, req, res));

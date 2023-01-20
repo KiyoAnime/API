@@ -7,8 +7,7 @@
         "module": "NodeNext",
         "moduleResolution": "Node",
         "paths": {
-            "@/*": ["./app/*"],
-            "@xata": ["./xata.ts"]
+            "@/*": ["./app/*"]
         }
     },
     "exclude": ["node_modules"]

@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 import serverError from '@/res/serverError';
 import success from '@/res/success';
+import badRequest from '@/res/badRequest';
 
 interface Results {
     id: number;
@@ -32,6 +33,11 @@ const index = async (app: FastifyInstance, req: SearchRequest, res: FastifyReply
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
     });
     return success(res, results);
+};
+
+export const validation =  (req: SearchRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+    if (!req.query.query) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'query' query paramater is undefined.");
+    next();
 };
 
 export default index;

@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { hashSync } from 'bcrypt';
 import badRequest from "@/res/badRequest";
 import success from "@/res/success";
@@ -30,4 +30,12 @@ export default async (app: FastifyInstance, req: RegisterRequest, res: FastifyRe
 
     const token = sign(id.toString(), process.env.APP_SECRET!);
     return success(res, { key: 'token', value: token }, { key: 'token', value: token });
+};
+
+export const validation = (req: RegisterRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+    if (!req.body) return badRequest(res, 'ERR.PARAM.UNDEFINED', 'The request body is undefined');
+    if (!req.body.email) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'email' paramater is undefined.");
+    if (!req.body.username) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'username' paramater is undefined.");
+    if (!req.body.password) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'password' paramater is undefined.");
+    next();
 };

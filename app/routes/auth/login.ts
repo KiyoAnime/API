@@ -2,7 +2,7 @@ import User from "@/models/User";
 import badRequest from "@/res/badRequest";
 import success from "@/res/success";
 import { compareSync } from "bcrypt";
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 import { sign } from "jsonwebtoken";
 
 export type LoginRequest = FastifyRequest<{ Body: { email: string; password: string; } }>;
@@ -13,4 +13,11 @@ export default async (app: FastifyInstance, req: LoginRequest, res: FastifyReply
     if (!passCheck) return badRequest(res, 'ERR.PARAM_INVALID', 'Incorrect password provided.');
     const token = sign(user._id.toString(), process.env.APP_SECRET!);
     return success(res, { key: 'token', value: token }, { key: 'token', value: token });
+};
+
+export const validation =  (req: LoginRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+    if (!req.body) return badRequest(res, 'ERR.PARAM.UNDEFINED', 'The request body is undefined');
+    if (!req.body.email) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'email' paramater is undefined.");
+    if (!req.body.password) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'password' paramater is undefined.");
+    next();
 };

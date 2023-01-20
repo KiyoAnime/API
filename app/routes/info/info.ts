@@ -1,7 +1,8 @@
+import badRequest from '@/res/badRequest';
 import serverError from '@/res/serverError';
 import success from '@/res/success';
 import axios from 'axios';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
 interface Episode {
     id: string;
@@ -95,6 +96,12 @@ const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) 
         return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 3
     });
     return success(res, info);
+};
+
+export const validation =  (req: InfoRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+    if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
+    if (!req.query.episodes) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'episodes' query paramater is undefined.");
+    next();
 };
 
 export default index;

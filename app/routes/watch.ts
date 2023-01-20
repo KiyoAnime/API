@@ -1,6 +1,7 @@
+import badRequest from '@/res/badRequest';
 import success from '@/res/success';
 import axios from 'axios';
-import { FastifyRequest, FastifyInstance, FastifyReply } from 'fastify';
+import { FastifyRequest, FastifyInstance, FastifyReply, HookHandlerDoneFunction } from 'fastify';
 
 interface Source {
     url: string;
@@ -46,6 +47,11 @@ const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply)
         });
     });
     return success(res, source);
+};
+
+export const validation =  (req: WatchRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+    if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
+    next();
 };
 
 export default index;
