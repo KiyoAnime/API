@@ -5,8 +5,8 @@ import getUser from "@/utilities/getUser";
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 
 export type DesignUpdateRequest = FastifyRequest<{ Body: {
-    publicEmail: string;
-    publicProfile: string;
+    publicEmail: boolean;
+    publicProfile: boolean;
 }}>;
 export default async (app: FastifyInstance, req: DesignUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
