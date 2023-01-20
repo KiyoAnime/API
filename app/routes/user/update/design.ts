@@ -11,7 +11,7 @@ export default async (app: FastifyInstance, req: DesignUpdateRequest, res: Fasti
     return success(res, null);
 };
 
-export const validation =  (req: DesignUpdateRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+export const validation = (req: DesignUpdateRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     if (!req.body) return badRequest(res, 'ERR.PARAM.UNDEFINED', 'The request body is undefined');
     if (!req.body.gradient) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'gradient' paramater is undefined");
     if (!req.body.gradient.end) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'gradient.end' paramater is undefined");
