@@ -21,6 +21,6 @@ export default async (app: FastifyInstance, req: DesignUpdateRequest, res: Fasti
 
 export const validation = (req: DesignUpdateRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     if (!req.body) return badRequest(res, 'ERR.PARAM.UNDEFINED', 'The request body is undefined');
-    if (!req.body.publicEmail) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'publicEmail' paramater is undefined");
-    if (!req.body.publicProfile) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'publicProfile' paramater is undefined");
+    if (typeof req.body.publicEmail !== 'boolean') return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'publicEmail' paramater is undefined");
+    if (typeof req.body.publicProfile !== 'boolean') return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'publicProfile' paramater is undefined");
 };
