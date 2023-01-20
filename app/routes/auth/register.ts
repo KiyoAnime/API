@@ -25,7 +25,7 @@ export default async (app: FastifyInstance, req: RegisterRequest, res: FastifyRe
         password: password,
         email: req.body.email,
         initialIpAddress: req.ip,
-        username: req.body.username
+        username: req.body.username.toLowerCase()
     });
 
     const token = sign(id.toString(), process.env.APP_SECRET!);
