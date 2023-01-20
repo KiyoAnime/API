@@ -20,7 +20,7 @@ export interface UserI {
     profile: {
         bio?: string;
         badges?: Types.Array<number>;
-        gradient?: { start: string; end: string; };
+        gradient: { start: string; end: string; };
     };
 }
 
@@ -43,8 +43,8 @@ const userSchema = new Schema<UserI, UserModel, UserMethod>({
         bio: { required: false, type: String },
         badges: { required: false, type: [Number] },
         gradient: {
-            start: { required: false, type: String },
-            end: { required: false, type: String }
+            start: { required: false, type: String, default: '#0c0c0c' },
+            end: { required: false, type: String, default: '#0c0c0c' }
         }
     }
 }, { timestamps: true });
