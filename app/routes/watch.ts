@@ -9,7 +9,7 @@ interface Source {
 }
 
 export type WatchRequest = FastifyRequest<{ Params: { id: string } }>;
-const index = async (app: FastifyInstance, req: WatchRequest, res: FastifyReply) => {
+export default async (app: FastifyInstance, req: WatchRequest, res: FastifyReply) => {
     const id = req.params.id;
     let def: string|undefined = undefined;
     let source: Source|undefined = undefined;
@@ -53,5 +53,3 @@ export const validation =  (req: WatchRequest, res: FastifyReply, next: HookHand
     if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
     next();
 };
-
-export default index;

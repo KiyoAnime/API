@@ -13,7 +13,7 @@ interface Trending {
     description: string;
 }
 
-const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
+export default async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
     const trending: Trending[] = [];
     // prettier-ignore
     await axios.get('https://apiconsumetorg-production.up.railway.app/meta/anilist/trending').then((response) => {
@@ -32,5 +32,3 @@ const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyRepl
     });
     return success(res, trending);
 };
-
-export default index;

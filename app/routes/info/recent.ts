@@ -9,7 +9,7 @@ interface Series {
     thumbnail: string;
 }
 
-const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
+export default async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
     const recent: Series[] = [];
     // prettier-ignore
     await axios.get('https://apiconsumetorg-production.up.railway.app/meta/anilist/recent-episodes?page=1&perPage=30').then((response) => {
@@ -22,5 +22,3 @@ const index = async (app: FastifyInstance, req: FastifyRequest, res: FastifyRepl
     const completeRecent = filteredRecent.slice(0, 21);
     return success(res, completeRecent);
 };
-
-export default index;

@@ -8,7 +8,7 @@ interface Episode {
 };
 
 export type EpisodesRequest = FastifyRequest<{ Params: { id: string } }>;
-const index = async (app: FastifyInstance, req: EpisodesRequest, res: FastifyReply) => {
+export default async (app: FastifyInstance, req: EpisodesRequest, res: FastifyReply) => {
     const episodes: Episode[] = [];
     const id = req.params.id;
     let total = 0;
@@ -19,5 +19,3 @@ const index = async (app: FastifyInstance, req: EpisodesRequest, res: FastifyRep
     });
     return success(res, { total: total, episodes: episodes });
 };
-
-export default index;

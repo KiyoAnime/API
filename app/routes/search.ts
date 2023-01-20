@@ -14,7 +14,7 @@ interface Results {
 }
 
 export type SearchRequest = FastifyRequest<{ Querystring: { query: string } }>;
-const index = async (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => {
+export default async (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => {
     const query = req.query.query;
     const results: Results[] = [];
     // prettier-ignore
@@ -39,5 +39,3 @@ export const validation =  (req: SearchRequest, res: FastifyReply, next: HookHan
     if (!req.query.query) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'query' query paramater is undefined.");
     next();
 };
-
-export default index;

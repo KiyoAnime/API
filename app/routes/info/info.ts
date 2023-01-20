@@ -40,7 +40,7 @@ interface Anime {
 }
 
 export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: boolean } }>;
-const index = async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) => {
+export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) => {
     let info: Anime | undefined;
     const id = req.params.id;
     // prettier-ignore
@@ -103,5 +103,3 @@ export const validation =  (req: InfoRequest, res: FastifyReply, next: HookHandl
     if (!req.query.episodes) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'episodes' query paramater is undefined.");
     next();
 };
-
-export default index;
