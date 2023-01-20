@@ -13,7 +13,15 @@ export interface UserI {
     ipAddress?: string;
     profileName?: string;
     initialIpAddress?: string;
-    badges: Types.Array<number>;
+    config: {
+        publicEmail: boolean;
+        publicProfile: boolean;
+    };
+    profile: {
+        bio?: string;
+        badges?: Types.Array<number>;
+        gradient?: { start: string; end: string; };
+    };
 }
 
 export type SafeUserI = Omit<UserI, 'password' | 'ipAddress' | 'initialIpAddress'>;
@@ -22,12 +30,23 @@ const userSchema = new Schema<UserI, UserModel, UserMethod>({
     _id: Number,
     email: { required: true, type: String },
     avatar: { required: false, type: String },
-    badges: { required: true, type: [Number] },
     username: { required: true, type: String },
     password: { required: true, type: String },
     ipAddress: { required: true, type: String },
     profileName: { required: false, type: String },
-    initialIpAddress: { required: true, type: String }
+    initialIpAddress: { required: true, type: String },
+    config: {
+        publicEmail: { required: false, type: Boolean, default: false },
+        publicProfile: { required: false, type: Boolean, default: true }
+    },
+    profile: {
+        bio: { required: false, type: String },
+        badges: { required: false, type: [Number] },
+        gradient: {
+            start: { required: false, type: String },
+            end: { required: false, type: String }
+        }
+    }
 }, { timestamps: true });
 
 userSchema.method('transform', function () {
@@ -36,9 +55,17 @@ userSchema.method('transform', function () {
         _id: data._id,
         email: data.email,
         avatar: data.avatar,
-        badges: data.badges,
         username: data.username,
-        profileName: data.profileName
+        profileName: data.profileName,
+        config: {
+            publicEmail: data.config.publicEmail,
+            publicProfile: data.config.publicProfile
+        },
+        profile: {
+            bio: data.profile.bio,
+            badges: data.profile.badges,
+            gradient: data.profile.gradient
+        }
     };
 });
 

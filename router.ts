@@ -5,9 +5,9 @@ import search from '@/routes/search';
 import watch from '@/routes/watch';
 import { info, recent, trending, episodes } from '@/routes/info';
 import { check, login, register } from '@/routes/auth';
-import { user, userUpdate } from '@/routes/user';
+import { user, userUpdate, designUpdate } from '@/routes/user';
 import authorization from '@/middleware/authorization';
-import { userUpdateVal } from '@/validation/user';
+import { userUpdateVal, designUpdateVal } from '@/validation/user';
 
 export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
@@ -16,6 +16,7 @@ export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
 
     route.get('/user', { preHandler: authorization },  (req, res) => user(route, req, res));
     route.post('/user', { preHandler: authorization, preValidation: userUpdateVal }, (req, res) => userUpdate(route, req, res));
+    route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));

@@ -1,5 +1,5 @@
 import badRequest from "@/res/badRequest";
-import { UserUpdateRequest } from "@/routes/user/update";
+import { UserUpdateRequest } from "@/routes/user/update/user";
 import { FastifyReply, HookHandlerDoneFunction } from "fastify";
 
 export default (req: UserUpdateRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
