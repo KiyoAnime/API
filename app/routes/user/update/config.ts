@@ -23,4 +23,5 @@ export const validation = (req: DesignUpdateRequest, res: FastifyReply, next: Ho
     if (!req.body) return badRequest(res, 'ERR.PARAM.UNDEFINED', 'The request body is undefined');
     if (typeof req.body.publicEmail !== 'boolean') return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'publicEmail' paramater is undefined");
     if (typeof req.body.publicProfile !== 'boolean') return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'publicProfile' paramater is undefined");
+    next();
 };

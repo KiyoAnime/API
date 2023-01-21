@@ -6,7 +6,7 @@ import watch, { validation as watchVal } from '@/routes/watch';
 import search, { validation as searchVal } from '@/routes/search';
 import { info, recent, trending, infoVal } from '@/routes/info';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
-import { user, userUpdate, configUpdate, designUpdate, userUpdateVal, configUpdateVal, designUpdateVal } from '@/routes/user';
+import { user, bioUpdate, userUpdate, configUpdate, designUpdate, bioUpdateVal, userUpdateVal, configUpdateVal, designUpdateVal } from '@/routes/user';
 
 export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
@@ -15,6 +15,7 @@ export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
 
     route.get('/user', { preHandler: authorization },  (req, res) => user(route, req, res));
     route.post('/user', { preHandler: authorization, preValidation: userUpdateVal }, (req, res) => userUpdate(route, req, res));
+    route.post('/user/profile/bio', { preHandler: authorization, preValidation: bioUpdateVal }, (req, res) => bioUpdate(route, req, res));
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
 
