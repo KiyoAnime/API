@@ -5,9 +5,9 @@ import authorization from '@/middleware/authorization';
 import watch, { validation as watchVal } from '@/routes/watch';
 import search, { validation as searchVal } from '@/routes/search';
 import { info, recent, trending, infoVal } from '@/routes/info';
+import profile, { validation as profileVal } from '@/routes/profile';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import { user, bioUpdate, userUpdate, configUpdate, designUpdate, bioUpdateVal, userUpdateVal, configUpdateVal, designUpdateVal } from '@/routes/user';
-import profile, { UserSearchRequest } from '@/routes/profile';
 
 export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
@@ -16,11 +16,10 @@ export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
 
     route.get('/user', { preHandler: authorization },  (req, res) => user(route, req, res));
     route.post('/user', { preHandler: authorization, preValidation: userUpdateVal }, (req, res) => userUpdate(route, req, res));
+    route.get('/user/profile/:user', { preValidation: profileVal }, (req, res) => profile(route, req, res));
     route.post('/user/profile/bio', { preHandler: authorization, preValidation: bioUpdateVal }, (req, res) => bioUpdate(route, req, res));
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
-
-    route.get('/profile/:username', (req, res) => profile(route, req as UserSearchRequest, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));

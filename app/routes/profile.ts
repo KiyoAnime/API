@@ -1,12 +1,17 @@
 import User from "@/models/User";
+import badRequest from "@/res/badRequest";
+import notFound from "@/res/notFound";
 import success from "@/res/success";
-import userNotfound from "@/res/userNotfound";
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 
-export type UserSearchRequest = FastifyRequest<{ Querystring: { username: string } }>;
-export default async (app: FastifyInstance, req: UserSearchRequest, res: FastifyReply) => {
-    const username = req.query.username;
-    const user = await User.findOne({ profileName: username });
-    if (!user) return userNotfound(res, "ERR.USER_NOT_FOUND", "The user you are looking for does not exist.")
-    return success(res, user);
+export type UserProfileRequest = FastifyRequest<{ Params: { user: string; } }>;
+export default async (app: FastifyInstance, req: UserProfileRequest, res: FastifyReply) => {
+    const user = await User.findOne({ username: req.params.user });
+    if (!user || !user.config.publicProfile) return notFound(res, 'ERR.USER.NOTFOUND', 'The specified user was not found.');
+    return success(res, user.getProfile());
+};
+
+export const validation = (req: UserProfileRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+    if (!req.params.user) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'user' paramater is undefined.");
+    next();
 };
