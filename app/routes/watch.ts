@@ -8,84 +8,48 @@ interface Source {
     embedded: string;
 }
 
-export type WatchRequest = FastifyRequest<{ Params: { id: string }; Querystring: { dub?: boolean } }>;
+export type WatchRequest = FastifyRequest<{ Params: { id: string } }>;
 export default async (app: FastifyInstance, req: WatchRequest, res: FastifyReply) => {
     const id = req.params.id;
-    let def: string | undefined = undefined;
-    let source: Source | undefined = undefined;
-    let backup: string | undefined = undefined;
-    if (!req.query.dub) {
-        await axios.get(`https://apiconsumetorg-production.up.railway.app/anime/gogoanime/watch/${id}`).then(async (response) => {
-            if (!response.data.sources) {
-                await axios.get(`https://apiconsumetorg-production.up.railway.app/anime/gogoanime/servers/${id}`).then((sRes) => {
-                    source = { url: '', embedded: sRes.data[0].url };
-                });
-            } else {
-                const rawSources = response.data.sources;
-                for await (const src of rawSources) {
-                    if (src.url.includes('vipanicdn.net')) { } else {
-                        switch (src.quality) {
-                            case 'default':
-                                def = src.url;
-                                break;
-
-                            case 'backup':
-                                backup = src.url;
-                                break;
-                        }
-                    }
-                };
-                console.log('d');
-                if (backup) {
-                    source = { url: backup, embedded: response.data.headers.Referer };
-                } else if (def) {
-                    source = { url: def, embedded: response.data.headers.Referer };
-                };
-            }
-        }).catch(async () => {
-            await axios.get(`https://apiconsumetorg-production.up.railway.app/anime/gogoanime/servers/${id}`).then((sRes) => {
+    let def: string|undefined = undefined;
+    let source: Source|undefined = undefined;
+    let backup: string|undefined = undefined;
+    await axios.get(`https://api.consumet.org/anime/gogoanime/watch/${id}`).then(async (response) => {
+        if (!response.data.sources) {
+            await axios.get(`https://api.consumet.org/anime/gogoanime/servers/${id}`).then((sRes) => {
                 source = { url: '', embedded: sRes.data[0].url };
             });
-        });
-    } else { 
-        let dubid = id.replace('-episode', '-dub-episode')
-        await axios.get(`https://apiconsumetorg-production.up.railway.app/anime/gogoanime/watch/${dubid}`).then(async (response) => {
-            if (!response.data.sources) {
-                await axios.get(`https://apiconsumetorg-production.up.railway.app/anime/gogoanime/servers/${dubid}`).then((sRes) => {
-                    source = { url: '', embedded: sRes.data[0].url };
-                });
-            } else {
-                const rawSources = response.data.sources;
-                for await (const src of rawSources) {
-                    if (src.url.includes('vipanicdn.net')) { } else {
-                        switch (src.quality) {
-                            case 'default':
-                                def = src.url;
-                                break;
+        } else {
+            const rawSources = response.data.sources;
+            for await (const src of rawSources) {
+                if (src.url.includes('vipanicdn.net')) {} else {
+                    switch (src.quality) {
+                        case 'default':
+                            def = src.url;
+                            break;
 
-                            case 'backup':
-                                backup = src.url;
-                                break;
-                        }
+                        case 'backup':
+                            backup = src.url;
+                            break;
                     }
-                };
-                console.log('d');
-                if (backup) {
-                    source = { url: backup, embedded: response.data.headers.Referer };
-                } else if (def) {
-                    source = { url: def, embedded: response.data.headers.Referer };
-                };
-            }
-        }).catch(async () => {
-            await axios.get(`https://apiconsumetorg-production.up.railway.app/anime/gogoanime/servers/${dubid}`).then((sRes) => {
-                source = { url: '', embedded: sRes.data[0].url };
-            });
+                }
+            };
+            console.log('d');
+            if (backup) {
+                source = { url: backup, embedded: response.data.headers.Referer };
+            } else if (def) {
+                source = { url: def, embedded: response.data.headers.Referer };
+            };
+        }
+    }).catch(async () => {
+        await axios.get(`https://api.consumet.org/anime/gogoanime/servers/${id}`).then((sRes) => {
+            source = { url: '', embedded: sRes.data[0].url };
         });
-    }
+    });
     return success(res, source);
 };
 
-export const validation = (req: WatchRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+export const validation =  (req: WatchRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
     next();
 };
