@@ -1,6 +1,5 @@
-import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { FastifyPluginOptions } from 'fastify';
 import authorization from '@/middleware/authorization';
-
 // Route Imports:
 import watch, { validation as watchVal } from '@/routes/watch';
 import search, { validation as searchVal } from '@/routes/search';
@@ -9,7 +8,7 @@ import profile, { validation as profileVal } from '@/routes/profile';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import { user, bioUpdate, userUpdate, configUpdate, designUpdate, bioUpdateVal, userUpdateVal, configUpdateVal, designUpdateVal } from '@/routes/user';
 
-export default async (route: FastifyInstance, opts: FastifyPluginOptions) => {
+export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
     route.post('/auth/check', { preValidation: checkVal }, (req, res) => check(route, req, res));
     route.post('/auth/register', { preValidation: registerVal }, (req, res) => register(route, req, res));

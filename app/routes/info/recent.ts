@@ -1,27 +1,11 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import serverError from '@/res/serverError';
 import success from '@/res/success';
-import { ITitle, META } from '@consumet/extensions';
+import Recent from '@/interfaces/Recent';
 
-interface Series {
-    id: number;
-    title: string;
-    thumbnail: string;
-}
-
-const al = new META.Anilist();
-export default async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
-    const recent: Series[] = [];
-    // prettier-ignore
-    await al.fetchRecentEpisodes('gogoanime', 1, 65).then(async (rE) => {
-        for (const ep of rE.results) {
-            recent.push({
-                id: parseInt(ep.id),
-                title: (ep.title as ITitle).userPreferred!,
-                thumbnail: ep.image!
-            });
-        }
-        const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 28);
-        return success(res, filteredRecent);
-    }).catch(() => serverError(res, 'ERR.REQUEST_FAILED', 'The request to the AniList API failed.'));
+export default async (app: Instance, req: FastifyRequest, res: FastifyReply) => {
+    const data = await app.redis.get('recent');
+    if (!data) return serverError(res, 'ERR.CACHE.NULL', 'The required data was not found in the cache. Please try again in a few moments.');
+    const recent: Recent[] = JSON.parse(data);
+    return success(res, recent);
 };
