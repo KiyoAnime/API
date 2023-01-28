@@ -1,6 +1,6 @@
 import serverError from '@/res/serverError';
 import success from '@/res/success';
-import axios from 'axios';
+import { ITitle, META } from '@consumet/extensions';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 interface Trending {
@@ -8,27 +8,26 @@ interface Trending {
     title: string;
     banner: string;
     episodes: number;
-    duration: number;
     released: number;
     description: string;
 }
 
+const al = new META.Anilist();
 export default async (app: FastifyInstance, req: FastifyRequest, res: FastifyReply) => {
-    const trending: Trending[] = [];
     // prettier-ignore
-    await axios.get('https://apiconsumetorg-production.up.railway.app/meta/anilist/trending').then((response) => {
-        if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
-        for (const result of response.data.results) trending.push({
-            id: parseInt(result.id),
-            title: result.title.userPreferred,
-            banner: result.cover,
-            duration: result.duration,
-            released: result.releaseDate,
-            episodes: result.totalEpisodes,
-            description: result.description
-        });
-    }).catch(() => {
-        return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 2
-    });
-    return success(res, trending);
+    await al.fetchTrendingAnime(1, 10).then(async (tA) => {
+        const trending: Trending[] = [];
+        for (const result of tA.results) {
+            const series = await al.fetchAnimeInfo(result.id);
+            trending.push({
+                id: parseInt(result.id),
+                title: (result.title as ITitle).userPreferred!,
+                banner: result.cover!,
+                released: parseInt(result.releaseDate!),
+                episodes: series.totalEpisodes!,
+                description: series.description!
+            });
+        }
+        return success(res, trending);
+    }).catch(() => serverError(res, 'ERR.REQUEST_FAILED', 'The request to the AniList API failed.'));
 };

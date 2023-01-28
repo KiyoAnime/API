@@ -1,7 +1,7 @@
 import badRequest from '@/res/badRequest';
 import serverError from '@/res/serverError';
 import success from '@/res/success';
-import axios from 'axios';
+import { ITitle, META } from '@consumet/extensions';
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
 interface Episode {
@@ -20,86 +20,68 @@ interface WatchOrder {
 interface Anime {
     id: number;
     mal: number;
+    sub: boolean;
+    dub: boolean;
     type: string;
     title: string;
-    color: string;
     adult: boolean;
     banner: string;
+    rating: number;
     genres: string[];
     released: number;
-    duration: number;
-    subOrDub: string;
     thumbnail: string;
-    popularity: number;
     description: string;
     episodeCount: number;
     episodes: Episode[]|undefined;
-    watchOrder: WatchOrder[]|undefined;
-    end: { month: number; year: number; day: number; };
-    start: { month: number; year: number; day: number; };
+    watchOrder?: WatchOrder[]|undefined;
+    end?: { day: number; month: number; year: number; };
+    start: { day: number; month: number; year: number; };
 }
 
-export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: boolean } }>;
+const al = new META.Anilist();
+export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { order: string; episodes: string; } }>;
 export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) => {
-    let info: Anime | undefined;
-    const id = req.params.id;
-    // prettier-ignore
-    await axios.get(`https://apiconsumetorg-production.up.railway.app/meta/anilist/info/${id}`).then(async (response) => {
-        if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=1'); // REASON 1
-        const data = response.data;
-        const watchOrder: WatchOrder[] = [];
-        await axios.get(`https://chiaki.vercel.app/get?group_id=${data.mappings.mal}`).then(async(wores) => {
-            if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Chiaki API failed. R=1'); // REASON 2
-            const data = wores.data;
-            for (const anime of data) {
-                watchOrder.push({
-                    index: anime.index,
-                    name: anime.name,
-                    id: anime.url.split('/').pop(),
-                    info: anime.info,
-                    url: anime.url,
-                });
-            }
-        })
-        info = {
-            id: parseInt(data.id),
-            title: data.title.romaji,
-            color: data.color,
-            description: data.description,
-            subOrDub: data.subOrDub,
-            banner: data.cover,
-            thumbnail: data.image,
-            released: data.releaseDate,
-            episodeCount: data.totalEpisodes,
-            duration: data.duration,
-            adult: data.isAdult,
-            popularity: data.popularity,
-            type: data.type,
-            start: data.startDate,
-            end: data.endDate,
-            mal: data.malId,
-            genres: data.genres,
-            episodes: [],
-            watchOrder,
+    await al.fetchAnimeInfo(req.params.id).then((info) => {
+        let anime: Anime|undefined = undefined;
+        anime = {
+            id: parseInt(info.id),
+            title: (info.title as ITitle).romaji!,
+            description: info.description!,
+            thumbnail: info.image!,
+            banner: info.cover!,
+            sub: info.hasSub!,
+            dub: info.hasDub!,
+            released: parseInt(info.releaseDate!),
+            episodeCount: info.totalEpisodes!,
+            adult: info.isAdult!,
+            rating: info.rating!,
+            type: info.type!,
+            end: info.endDate?.day && info.endDate.month && info.endDate.year ? { day: info.endDate.day, month: info.endDate.month, year: info.endDate.year } : undefined,
+            start: { day: info.startDate?.day!, month: info.startDate?.month!, year: info.startDate?.year! },
+            genres: info.genres!,
+            mal: parseInt(info.malId as string),
+            episodes: req.query.episodes === 'true' ? info.episodes! : undefined,
         };
-        if (req.query.episodes) {
-            for (const episode of data.episodes) {
-                if (req.query.episodes = false) info.episodes = [];
-                if (info.episodes === undefined) info.episodes = [];
-                info.episodes.push({
-                    id: episode.id,
-                    number: episode.number,
-                });
-            }
-        }
-    }).catch(() => {
-        return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Consumet API failed. R=2'); //REASON 3
-    });
-    return success(res, info);
+        return success(res, anime);
+    }).catch(() => serverError(res, 'ERR.REQUEST_FAILED', 'The request to the AniList API failed.'));
+    // prettier-ignore
+    //     await axios.get(`https://chiaki.vercel.app/get?group_id=${data.mappings.mal}`).then((response2) => {
+    //         if (response.status !== 200) return serverError(res, 'ERR.REQUEST_FAILED', 'The request to the Chiaki API failed. R=1'); // REASON 2
+    //         for (const anime of response2.data) {
+    //             order.push({
+    //                 index: anime.index,
+    //                 name: anime.name,
+    //                 id: anime.url.split('/').pop(),
+    //                 info: anime.info,
+    //                 url: anime.url,
+    //             });
+    //         }
+    //     });
 };
 
 export const validation =  (req: InfoRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
+    if (!req.query.order) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'order' query paramater is undefined.");
     if (!req.query.episodes) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'episodes' query paramater is undefined.");
     next();
 };
