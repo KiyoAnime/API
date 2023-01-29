@@ -1,5 +1,5 @@
 import config from 'config';
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyInstance, HookHandlerDoneFunction as HHDF } from 'fastify';
 import router from './router';
 import fastifyCors from '@fastify/cors';
 import fastifyCookie from '@fastify/cookie';

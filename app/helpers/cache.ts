@@ -5,6 +5,7 @@ import { ITitle, META } from "@consumet/extensions";
 const al = new META.Anilist();
 
 export default async (app: Instance) => {
+    if (process.argv.includes('--dev')) return;
     console.time('cache');
     console.log('Beginning process of caching data. Please wait...');
     await setRecent(app);
@@ -18,7 +19,7 @@ async function setRecent(app: Instance): Promise<void> {
     await al.fetchRecentEpisodes('gogoanime', 1, 65).then(async (res) => {
         for (const ep of res.results) {
             const anime = await al.fetchAnilistInfoById(ep.id);
-            if (anime.countryOfOrigin !== 'JP') {} else {
+            if (anime.countryOfOrigin === 'CN') {} else {
                 recent.push({
                     id: parseInt(anime.id),
                     title: (anime.title as ITitle).romaji!,

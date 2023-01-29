@@ -1,10 +1,11 @@
 import { FastifyPluginOptions } from 'fastify';
 import authorization from '@/middleware/authorization';
+
 // Route Imports:
 import watch, { validation as watchVal } from '@/routes/watch';
 import search, { validation as searchVal } from '@/routes/search';
-import { info, recent, trending, infoVal } from '@/routes/info';
 import profile, { validation as profileVal } from '@/routes/profile';
+import { info, order, recent, trending, infoVal, orderVal } from '@/routes/info';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import { user, bioUpdate, userUpdate, configUpdate, designUpdate, bioUpdateVal, userUpdateVal, configUpdateVal, designUpdateVal } from '@/routes/user';
 
@@ -23,6 +24,7 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));
     route.get('/info/:id', { preValidation: infoVal }, (req, res) => info(route, req, res));
+    route.get('/info/:id/order', { preValidation: orderVal }, (req, res) => order(route, req, res));
 
     route.get('/search', { preValidation: searchVal }, (req, res) => search(route, req, res));
     route.get('/watch/:id', { preValidation: watchVal }, (req, res) => watch(route, req, res));
