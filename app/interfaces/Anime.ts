@@ -21,7 +21,7 @@ export default interface Anime {
     title: string;
     adult: boolean;
     banner: string;
-    rating: number;
+    rating?: number;
     genres: string[];
     released: number;
     thumbnail: string;
