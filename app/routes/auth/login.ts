@@ -12,7 +12,7 @@ export default async (app: FastifyInstance, req: LoginRequest, res: FastifyReply
     const passCheck = compareSync(req.body.password, user.password!);
     if (!passCheck) return badRequest(res, 'ERR.PARAM.INVALID', 'Incorrect password provided.');
     const token = sign(user._id.toString(), process.env.APP_SECRET!);
-    return success(res, { key: 'token', value: token }, { key: 'token', value: token });
+    return success(res, { key: 'token', value: token });
 };
 
 export const validation =  (req: LoginRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
