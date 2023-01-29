@@ -18,7 +18,7 @@ export default async (app: Instance, req: OrderRequest, res: FastifyReply) => {
             if (!alId) {} else {
                 const info = await al.fetchAnilistInfoById(alId.toString()).catch(() => {});
                 if (!info) {} else {
-                    if (info.genres?.includes('Hentai')) {} else {
+                    if (info.genres?.includes('Hentai') || info.type === 'MANGA') {} else {
                         order.push({
                             id: parseInt(info.id),
                             index: a.index,
