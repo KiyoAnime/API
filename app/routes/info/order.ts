@@ -18,14 +18,16 @@ export default async (app: Instance, req: OrderRequest, res: FastifyReply) => {
             if (!alId) {} else {
                 const info = await al.fetchAnilistInfoById(alId.toString()).catch(() => {});
                 if (!info) {} else {
-                    order.push({
-                        id: parseInt(info.id),
-                        index: a.index,
-                        title: (info.title as ITitle).romaji!,
-                        rating: info.rating,
-                        released: parseInt(info.releaseDate!),
-                        thumbnail: info.image!
-                    });
+                    if (info.genres?.includes('Hentai')) {} else {
+                        order.push({
+                            id: parseInt(info.id),
+                            index: a.index,
+                            title: (info.title as ITitle).romaji!,
+                            rating: info.rating,
+                            released: parseInt(info.releaseDate!),
+                            thumbnail: info.image!
+                        });
+                    }
                 }
             }
         }
