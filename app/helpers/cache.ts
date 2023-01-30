@@ -27,7 +27,7 @@ async function setRecent(app: Instance): Promise<void> {
                 });
             };
         }
-    });
+    }).catch(() => {});
     const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 28);
     app.redis.set('recent', JSON.stringify(filteredRecent));
 };
@@ -46,6 +46,6 @@ async function setTrending(app: Instance): Promise<void> {
                 description: anime.description!
             });
         }
-    });
+    }).catch(() => {});
     app.redis.set('trending', JSON.stringify(trending));
 };
