@@ -8,6 +8,7 @@ import profile, { validation as profileVal } from '@/routes/profile';
 import { info, order, recent, trending, infoVal, orderVal } from '@/routes/info';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import { user, bioUpdate, userUpdate, configUpdate, designUpdate, bioUpdateVal, userUpdateVal, configUpdateVal, designUpdateVal } from '@/routes/user';
+import sync, { UserSyncRequest } from '@/routes/sync';
 
 export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
@@ -20,6 +21,7 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/user/profile/bio', { preHandler: authorization, preValidation: bioUpdateVal }, (req, res) => bioUpdate(route, req, res));
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
+    route.get('/user/sync', (req, res) => sync(route, req as UserSyncRequest, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));
