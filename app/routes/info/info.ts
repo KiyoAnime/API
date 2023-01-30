@@ -16,6 +16,7 @@ export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply)
             description: info.description!,
             thumbnail: info.image!,
             banner: info.cover!,
+            color: info.color!,
             sub: info.hasSub!,
             dub: info.hasDub!,
             released: parseInt(info.releaseDate!),
@@ -27,8 +28,8 @@ export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply)
             start: { day: info.startDate?.day!, month: info.startDate?.month!, year: info.startDate?.year! },
             genres: info.genres!,
             mal: parseInt(info.malId as string),
+            titles: { ...info.title as ITitle },
             episodes: req.query.episodes === 'true' ? info.episodes! : undefined,
-            titles: { ...info.title as ITitle }
         };
         return success(res, anime);
     }).catch((err) => serverError(res, 'ERR.REQUEST_FAILED', `The request to the AniList API failed. Meta: ${err}`));
