@@ -15,8 +15,8 @@ export default async (app: Instance) => {
 };
 
 async function setRecent(app: Instance): Promise<void> {
-    const recent: Recent[] = [];
     await al.fetchRecentEpisodes('gogoanime', 1, 65).then(async (res) => {
+        const recent: Recent[] = [];
         for (const ep of res.results) {
             const anime = await al.fetchAnilistInfoById(ep.id);
             if (anime.countryOfOrigin === 'CN') {} else {
@@ -27,14 +27,14 @@ async function setRecent(app: Instance): Promise<void> {
                 });
             };
         }
+        const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 28);
+        app.redis.set('recent', JSON.stringify(filteredRecent));
     }).catch(() => {});
-    const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 28);
-    app.redis.set('recent', JSON.stringify(filteredRecent));
 };
 
 async function setTrending(app: Instance): Promise<void> {
-    const trending: Trending[] = [];
     await al.fetchTrendingAnime(1, 10).then(async (res) => {
+        const trending: Trending[] = [];
         for (const result of res.results) {
             const anime = await al.fetchAnilistInfoById(result.id);
             trending.push({
@@ -46,6 +46,6 @@ async function setTrending(app: Instance): Promise<void> {
                 description: anime.description!
             });
         }
+        app.redis.set('trending', JSON.stringify(trending));
     }).catch(() => {});
-    app.redis.set('trending', JSON.stringify(trending));
 };
