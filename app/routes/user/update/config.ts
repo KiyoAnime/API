@@ -10,12 +10,11 @@ export type DesignUpdateRequest = FastifyRequest<{ Body: {
 }}>;
 export default async (app: FastifyInstance, req: DesignUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
-    await User.updateOne({ _id: user._id }, {
-        config: {
-            publicEmail: req.body.publicEmail,
-            publicProfile: req.body.publicProfile
-        }
-    });
+    await User.updateOne({ _id: user._id }, { config: {
+        ...user.config,
+        publicEmail: req.body.publicEmail,
+        publicProfile: req.body.publicProfile
+    }});
     return success(res, null);
 };
 

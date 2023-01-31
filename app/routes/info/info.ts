@@ -16,7 +16,6 @@ export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply)
             description: info.description!,
             thumbnail: info.image!,
             banner: info.cover!,
-            color: info.color!,
             sub: info.hasSub!,
             dub: info.hasDub!,
             released: parseInt(info.releaseDate!),

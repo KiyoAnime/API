@@ -19,7 +19,6 @@ export default interface Anime {
     dub: boolean;
     type: string;
     title: string;
-    color: string;
     adult: boolean;
     banner: string;
     rating?: number;

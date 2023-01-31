@@ -15,6 +15,8 @@ export interface UserI {
     profileName: string;
     initialIpAddress?: string;
     config: {
+        autoNext: boolean;
+        autoSkip: boolean;
         publicEmail: boolean;
         publicProfile: boolean;
     };
@@ -39,6 +41,8 @@ const userSchema = new Schema<UserI, UserModel, UserMethods>({
     profileName: { required: true, type: String },
     initialIpAddress: { required: true, type: String },
     config: {
+        autoNext: { required: true, type: Boolean, default: true },
+        autoSkip: { required: true, type: Boolean, default: false },
         publicEmail: { required: true, type: Boolean, default: false },
         publicProfile: { required: true, type: Boolean, default: true }
     },
@@ -77,6 +81,8 @@ userSchema.method('transform', function () {
         username: data.username,
         profileName: data.profileName,
         config: {
+            autoNext: data.config.autoNext,
+            autoSkip: data.config.autoSkip,
             publicEmail: data.config.publicEmail,
             publicProfile: data.config.publicProfile
         },
