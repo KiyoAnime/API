@@ -1,0 +1,9 @@
+{
+    port: 3123,
+    bind: '127.0.0.1',
+    discord: {
+        guildId: '1055795076099473448',
+        clientId: '809592287977930792',
+        callback: 'https://kiyo.moe/callback/discord'
+    }
+}

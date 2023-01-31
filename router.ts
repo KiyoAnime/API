@@ -5,6 +5,7 @@ import authorization from '@/middleware/authorization';
 import watch, { validation as watchVal } from '@/routes/watch';
 import search, { validation as searchVal } from '@/routes/search';
 import profile, { validation as profileVal } from '@/routes/profile';
+import { discord } from '@/routes/user/integrations';
 import { info, order, recent, trending, infoVal, orderVal } from '@/routes/info';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import {
@@ -30,12 +31,13 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.get('/user', { preHandler: authorization },  (req, res) => user(route, req, res));
     route.post('/user', { preHandler: authorization, preValidation: userUpdateVal }, (req, res) => userUpdate(route, req, res));
     route.post('/user/player', { preHandler: authorization, preValidation: playerUpdateVal }, (req, res) => playerUpdate(route, req, res));
-    
+
     route.get('/user/profile/:user', { preValidation: profileVal }, (req, res) => profile(route, req, res));
     route.post('/user/profile/bio', { preHandler: authorization, preValidation: bioUpdateVal }, (req, res) => bioUpdate(route, req, res));
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
     route.get('/user/sync', (req, res) => sync(route, req as UserSyncRequest, res));
+    route.get('/user/integrations/discord', (req, res) => discord(route, req, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));

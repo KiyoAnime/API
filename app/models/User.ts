@@ -25,6 +25,12 @@ export interface UserI {
         badges?: Types.Array<number>;
         gradient: { start: string; end: string; };
     };
+    integrations: {
+        discord?: {
+            id: string;
+            tag: string;
+        };
+    };
 }
 
 export type ProfileI = Omit<SafeUserI, 'config'>;
@@ -53,6 +59,12 @@ const userSchema = new Schema<UserI, UserModel, UserMethods>({
             start: { required: true, type: String, default: '#0c0c0c' },
             end: { required: true, type: String, default: '#0c0c0c' }
         }
+    },
+    integrations: {
+        discord: { required: false, type: {
+            id: { required: true, type: String },
+            tag: { required: true, type: String }
+        }}
     }
 }, { timestamps: true });
 
@@ -64,11 +76,7 @@ userSchema.method('getProfile', function () {
         avatar: data.avatar,
         username: data.username,
         profileName: data.profileName,
-        profile: {
-            bio: data.profile.bio,
-            badges: data.profile.badges,
-            gradient: data.profile.gradient
-        }
+        profile: data.profile
     };
 });
 
@@ -80,17 +88,9 @@ userSchema.method('transform', function () {
         avatar: data.avatar,
         username: data.username,
         profileName: data.profileName,
-        config: {
-            autoNext: data.config.autoNext,
-            autoSkip: data.config.autoSkip,
-            publicEmail: data.config.publicEmail,
-            publicProfile: data.config.publicProfile
-        },
-        profile: {
-            bio: data.profile.bio,
-            badges: data.profile.badges,
-            gradient: data.profile.gradient
-        }
+        config: data.config,
+        profile: data.profile,
+        integrations: data.integrations
     };
 });
 
