@@ -1,12 +1,15 @@
 import Anime from '@/interfaces/Anime';
+import Progress from '@/models/Progress';
+import User from '@/models/User';
 import badRequest from '@/res/badRequest';
 import serverError from '@/res/serverError';
 import success from '@/res/success';
+import getUser from '@/utilities/getUser';
 import { ITitle, META } from '@consumet/extensions';
 import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
 const al = new META.Anilist();
-export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: string; } }>;
+export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: string; progress: string } }>;
 export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) => {
     await al.fetchAnimeInfo(req.params.id).then(async (info) => {
         let anime: Anime|undefined = undefined;
@@ -28,8 +31,13 @@ export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply)
             genres: info.genres!,
             mal: parseInt(info.malId as string),
             titles: { ...info.title as ITitle },
-            episodes: req.query.episodes === 'true' ? info.episodes! : undefined,
+            episodes: req.query.episodes === 'true' ? info.episodes! : undefined
         };
+        if (req.query.progress) {
+            const user = await getUser(req);
+            const progress = await Progress.findOne({ user: user._id, anime: info.id });
+            anime.progress = progress ? progress.episode : undefined;
+        }
         return success(res, anime);
     }).catch((err) => serverError(res, 'ERR.REQUEST_FAILED', `The request to the AniList API failed. Meta: ${err}`));
 };
@@ -37,5 +45,6 @@ export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply)
 export const validation = (req: InfoRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     if (!req.params.id) return badRequest(res, 'ERR.PARAM.UNDEFINED', "The 'id' paramater is undefined.");
     if (!req.query.episodes) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'episodes' query paramater is undefined.");
+    if (!req.query.progress) return badRequest(res, 'ERR.QUERY.UNDEFINED', "The 'progress' query paramater is undefined.");
     next();
 };

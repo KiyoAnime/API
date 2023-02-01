@@ -25,6 +25,7 @@ export default interface Anime {
     genres: string[];
     released: number;
     thumbnail: string;
+    progress?: number;
     description: string;
     episodes?: Episode[];
     episodeCount: number;
