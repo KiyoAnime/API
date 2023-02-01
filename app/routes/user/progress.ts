@@ -13,7 +13,7 @@ export default async (app: Instance, req: ProgressUpdateRequest, res: FastifyRep
         await Progress.create({ _id: id, user: user._id, anime: req.body.id, episode: req.body.episode, progress: req.body.progress });
         return success(res, null);
     } else {
-        await Progress.updateOne({ user: user._id, anime: req.body.id, episode: req.body.episode }, { progress: req.body.progress });
+        await Progress.updateOne({ user: user._id, anime: req.body.id }, { episode: req.body.episode, progress: req.body.progress });
         return success(res, null);
     }
 };
