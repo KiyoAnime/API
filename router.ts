@@ -10,11 +10,13 @@ import { info, order, recent, trending, infoVal, orderVal } from '@/routes/info'
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import {
     user,
+    progress,
     bioUpdate,
     userUpdate,
     playerUpdate,
     configUpdate,
     designUpdate,
+    progressVal,
     bioUpdateVal,
     userUpdateVal,
     playerUpdateVal,
@@ -36,6 +38,7 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/user/profile/bio', { preHandler: authorization, preValidation: bioUpdateVal }, (req, res) => bioUpdate(route, req, res));
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
+    route.post('/user/progress', { preHandler: authorization, preValidation: progressVal }, (req, res) => progress(route, req, res));
     route.get('/user/sync', (req, res) => sync(route, req as UserSyncRequest, res));
     route.get('/user/integrations/discord', (req, res) => discord(route, req, res));
 
@@ -45,5 +48,5 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.get('/info/:id/order', { preValidation: orderVal }, (req, res) => order(route, req, res));
 
     route.get('/search', { preValidation: searchVal }, (req, res) => search(route, req, res));
-    route.get('/watch/:id', { preValidation: watchVal }, (req, res) => watch(route, req, res));
+    route.get('/watch/:anime/:ep', { preHandler: authorization, preValidation: watchVal }, (req, res) => watch(route, req, res));
 };
