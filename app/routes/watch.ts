@@ -31,7 +31,7 @@ export default async (app: FastifyInstance, req: WatchRequest, res: FastifyReply
             }
         }
         const progress = await Progress.findOne({ user: user._id, anime: req.params.anime, episode: parseInt(req.params.ep.split('-').pop()!) });
-        return success(res, { url: src, progress: progress && progress });
+        return success(res, { url: src, progress: progress && progress.progress });
     }).catch(() => {
         return notFound(res, 'ERR.EPISODE.NOTFOUND', 'The specified episode was not found.');
     });
