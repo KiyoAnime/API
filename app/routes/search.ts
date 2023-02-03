@@ -10,9 +10,11 @@ interface Results {
 }
 
 const al = new META.Anilist();
-export type SearchRequest = FastifyRequest<{ Querystring: { query?: string; genres?: string;  } }>;
+export type SearchRequest = FastifyRequest<{ Querystring: { page?: string; query?: string; genres?: string;  } }>;
 export default async (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => {
-    await al.advancedSearch(req.query.query, undefined, undefined, 105, undefined, undefined, req.query.genres ? JSON.parse(req.query.genres) : undefined).then((sR) => {
+    const page = req.query.page ? parseInt(req.query.page) : undefined;
+    const genres = req.query.genres ? JSON.parse(req.query.genres) : undefined;
+    await al.advancedSearch(req.query.query, 'ANIME', page, 35, undefined, undefined, genres).then((sR) => {
         const results: Results[] = [];
         for (const result of sR.results) results.push({
             id: parseInt(result.id),
