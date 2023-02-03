@@ -5,6 +5,7 @@
     "repository": "https://github.com/KiyoAnime/API",
     "author": "TheFallenSpirit <thefallenspirit@outlook.com>",
     "license": "Private",
+    "packageManager": "yarn@3.4.1",
     "engines": {
         "node": ">=16"
     },
