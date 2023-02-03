@@ -11,7 +11,7 @@ const al = new META.Anilist();
 export type OrderRequest = FastifyRequest<{ Params: { id: string } }>;
 export default async (app: Instance, req: OrderRequest, res: FastifyReply) => {
     // prettier-ignore
-    al.fetchAnilistInfoById(req.params.id).then(async (info) => {
+    await al.fetchAnilistInfoById(req.params.id).then(async (info) => {
         let order: Order[] = [];
         const chiaki = await axios.get(`https://chiaki.vercel.app/get?group_id=${info.malId}`);
         for (const a of chiaki.data) {
