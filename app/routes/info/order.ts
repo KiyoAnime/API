@@ -1,16 +1,17 @@
-import { Order } from "@/interfaces/Anime";
-import badRequest from "@/res/badRequest";
-import serverError from "@/res/serverError";
-import success from "@/res/success";
-import malToAnilist from "@/utilities/malToAnilist";
-import { ITitle, META } from "@consumet/extensions";
-import axios from "axios";
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { Order } from '@/interfaces/Anime';
+import badRequest from '@/res/badRequest';
+import serverError from '@/res/serverError';
+import success from '@/res/success';
+import malToAnilist from '@/utilities/malToAnilist';
+import { ITitle, META } from '@consumet/extensions';
+import axios from 'axios';
+import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
 const al = new META.Anilist();
 export type OrderRequest = FastifyRequest<{ Params: { id: string } }>;
 export default async (app: Instance, req: OrderRequest, res: FastifyReply) => {
-    await al.fetchAnilistInfoById(req.params.id).then(async (info) => {
+    // prettier-ignore
+    al.fetchAnilistInfoById(req.params.id).then(async (info) => {
         let order: Order[] = [];
         const chiaki = await axios.get(`https://chiaki.vercel.app/get?group_id=${info.malId}`);
         for (const a of chiaki.data) {
@@ -32,7 +33,7 @@ export default async (app: Instance, req: OrderRequest, res: FastifyReply) => {
             }
         }
         return success(res, order);
-    }).catch((err) => serverError(res, 'ERR.REQUEST_FAILED', `The request to the Chiaki API failed. Meta: ${err}`))
+    }).catch((err) => serverError(res, 'ERR.REQUEST_FAILED', `The request to the Chiaki API failed. Meta: ${err}`));
 };
 
 export const validation = (req: OrderRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {

@@ -1,6 +1,6 @@
-import Recent from "@/interfaces/Recent";
-import Trending from "@/interfaces/Trending";
-import { ITitle, META } from "@consumet/extensions";
+import Recent from '@/interfaces/Recent';
+import Trending from '@/interfaces/Trending';
+import { ITitle, META } from '@consumet/extensions';
 
 const al = new META.Anilist();
 
@@ -15,24 +15,24 @@ export default async (app: Instance) => {
 };
 
 async function setRecent(app: Instance): Promise<void> {
+    // prettier-ignore
     await al.fetchRecentEpisodes('gogoanime', 1, 65).then(async (res) => {
         const recent: Recent[] = [];
         for (const ep of res.results) {
             const anime = await al.fetchAnilistInfoById(ep.id);
-            if (anime.countryOfOrigin === 'CN') {} else {
-                recent.push({
-                    id: parseInt(anime.id),
-                    title: (anime.title as ITitle).romaji!,
-                    thumbnail: anime.image!
-                });
-            };
+            if (anime.countryOfOrigin === 'CN') {} else recent.push({
+                id: parseInt(anime.id),
+                title: (anime.title as ITitle).romaji!,
+                thumbnail: anime.image!
+            });
         }
         const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 28);
         app.redis.set('recent', JSON.stringify(filteredRecent));
     }).catch(() => {});
-};
+}
 
 async function setTrending(app: Instance): Promise<void> {
+    // prettier-ignore
     await al.fetchTrendingAnime(1, 10).then(async (res) => {
         const trending: Trending[] = [];
         for (const result of res.results) {
@@ -48,4 +48,4 @@ async function setTrending(app: Instance): Promise<void> {
         }
         app.redis.set('trending', JSON.stringify(trending));
     }).catch(() => {});
-};
+}

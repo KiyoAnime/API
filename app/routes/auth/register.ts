@@ -1,12 +1,12 @@
-import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 import { hashSync } from 'bcrypt';
-import badRequest from "@/res/badRequest";
-import success from "@/res/success";
+import badRequest from '@/res/badRequest';
+import success from '@/res/success';
 import { sign } from 'jsonwebtoken';
-import { genId } from "@/utilities/gen";
-import User from "@/models/User";
+import { genId } from '@/utilities/gen';
+import User from '@/models/User';
 
-export type RegisterRequest = FastifyRequest<{ Body: { email: string; username: string; password: string; } }>;
+export type RegisterRequest = FastifyRequest<{ Body: { email: string; username: string; password: string } }>;
 export default async (app: FastifyInstance, req: RegisterRequest, res: FastifyReply) => {
     // const existingIp = await User.exists({ ip_address: req.ip });
     // if (existingIp) return badRequest(res, 'ERR.DUPLICATE_ACCOUNT', '');
@@ -26,7 +26,7 @@ export default async (app: FastifyInstance, req: RegisterRequest, res: FastifyRe
         email: req.body.email,
         initialIpAddress: req.ip,
         profileName: req.body.username,
-        username: req.body.username.toLowerCase(),
+        username: req.body.username.toLowerCase()
     });
 
     const token = sign(id.toString(), process.env.APP_SECRET!);

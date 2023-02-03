@@ -10,10 +10,11 @@ interface Results {
 }
 
 const al = new META.Anilist();
-export type SearchRequest = FastifyRequest<{ Querystring: { page?: string; query?: string; genres?: string;  } }>;
+export type SearchRequest = FastifyRequest<{ Querystring: { page?: string; query?: string; genres?: string } }>;
 export default async (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => {
     const page = req.query.page ? parseInt(req.query.page) : undefined;
     const genres = req.query.genres ? JSON.parse(req.query.genres) : undefined;
+    // prettier-ignore
     await al.advancedSearch(req.query.query, 'ANIME', page, 35, undefined, undefined, genres).then((sR) => {
         const results: Results[] = [];
         for (const result of sR.results) results.push({
@@ -25,6 +26,6 @@ export default async (app: FastifyInstance, req: SearchRequest, res: FastifyRepl
     }).catch(() => serverError(res, 'ERR.REQUEST_FAILED', 'The request to the AniList API failed.'));
 };
 
-export const validation =  (req: SearchRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
+export const validation = (req: SearchRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {
     next();
 };

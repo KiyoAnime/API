@@ -1,4 +1,4 @@
-import { model, Model, Schema } from "mongoose";
+import { model, Model, Schema } from 'mongoose';
 
 export interface ProgressI {
     _id: number;
@@ -9,6 +9,7 @@ export interface ProgressI {
 }
 
 export type ProgressModel = Model<ProgressI>;
+// prettier-ignore
 const progressSchema = new Schema<ProgressI, ProgressModel>({
     _id: Number,
     user: { required: true, type: Number },

@@ -1,19 +1,25 @@
-import User from "@/models/User";
-import badRequest from "@/res/badRequest";
-import getUser from "@/utilities/getUser";
-import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import User from '@/models/User';
+import badRequest from '@/res/badRequest';
+import getUser from '@/utilities/getUser';
+import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
-export type PlayerUpdateRequest = FastifyRequest<{ Body: {
-    autoNext: boolean;
-    autoSkip: boolean;
-} }>;
+export type PlayerUpdateRequest = FastifyRequest<{
+    Body: {
+        autoNext: boolean;
+        autoSkip: boolean;
+    };
+}>;
 export default async (app: Instance, req: PlayerUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
-    await User.updateOne({ _id: user._id }, { config: {
-        ...user.config, 
-        autoNext: req.body.autoNext,
-        autoSkip: req.body.autoSkip
-    }});
+    // prettier-ignore
+    await User.updateOne(
+        { _id: user._id },
+        { config: {
+            ...user.config,
+            autoNext: req.body.autoNext,
+            autoSkip: req.body.autoSkip
+        }}
+    );
 };
 
 export const validation = (req: PlayerUpdateRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {

@@ -1,4 +1,4 @@
-import { model, Model, Schema } from "mongoose";
+import { model, Model, Schema } from 'mongoose';
 
 export interface BadgeI {
     _id: number;

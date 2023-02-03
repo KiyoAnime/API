@@ -1,4 +1,4 @@
-import { Model, model, Schema, Types } from "mongoose";
+import { Model, model, Schema, Types } from 'mongoose';
 
 interface UserMethods {
     transform: () => SafeUserI;
@@ -23,7 +23,7 @@ export interface UserI {
     profile: {
         bio?: string;
         badges?: Types.Array<number>;
-        gradient: { start: string; end: string; };
+        gradient: { start: string; end: string };
     };
     integrations: {
         discord?: {
@@ -37,6 +37,7 @@ export type ProfileI = Omit<SafeUserI, 'config'>;
 export type SafeUserI = Omit<UserI, 'password' | 'ipAddress' | 'initialIpAddress'>;
 
 export type UserModel = Model<UserI, {}, UserMethods>;
+// prettier-ignore
 const userSchema = new Schema<UserI, UserModel, UserMethods>({
     _id: Number,
     email: { required: true, type: String },
@@ -61,10 +62,13 @@ const userSchema = new Schema<UserI, UserModel, UserMethods>({
         }
     },
     integrations: {
-        discord: { required: false, type: {
-            id: { required: true, type: String },
-            tag: { required: true, type: String }
-        }}
+        discord: {
+            required: false,
+            type: {
+                id: { required: true, type: String },
+                tag: { required: true, type: String }
+            }
+        }
     }
 }, { timestamps: true });
 

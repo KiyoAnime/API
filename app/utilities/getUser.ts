@@ -1,6 +1,6 @@
-import User from "@/models/User";
-import { FastifyRequest } from "fastify";
-import { decode } from "jsonwebtoken";
+import User from '@/models/User';
+import { FastifyRequest } from 'fastify';
+import { decode } from 'jsonwebtoken';
 
 export default async (req: FastifyRequest) => {
     const authHeader = req.headers.authorization!.replace('Bearer ', '');

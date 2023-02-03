@@ -1,10 +1,10 @@
-import User from "@/models/User";
-import badRequest from "@/res/badRequest";
-import success from "@/res/success";
-import getUser from "@/utilities/getUser";
-import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import User from '@/models/User';
+import badRequest from '@/res/badRequest';
+import success from '@/res/success';
+import getUser from '@/utilities/getUser';
+import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
-export type BioUpdateRequest = FastifyRequest<{ Body: { bio: string; }}>;
+export type BioUpdateRequest = FastifyRequest<{ Body: { bio: string } }>;
 export default async (app: FastifyInstance, req: BioUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
     await User.updateOne({ _id: user._id }, { profile: { ...user.profile, bio: req.body.bio } });

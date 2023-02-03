@@ -29,7 +29,7 @@ export default interface Anime {
     description: string;
     episodes?: Episode[];
     episodeCount: number;
-    end?: { day: number; month: number; year: number; };
-    start: { day: number; month: number; year: number; };
-    titles: { english?: string; romaji?: string; native?: string; };
+    end?: { day: number; month: number; year: number };
+    start: { day: number; month: number; year: number };
+    titles: { english?: string; romaji?: string; native?: string };
 }

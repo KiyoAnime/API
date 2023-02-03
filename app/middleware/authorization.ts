@@ -1,7 +1,7 @@
-import User from "@/models/User";
-import unauthorized from "@/res/unauthorized";
-import { FastifyReply, FastifyRequest } from "fastify";
-import { verify } from "jsonwebtoken";
+import User from '@/models/User';
+import unauthorized from '@/res/unauthorized';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { verify } from 'jsonwebtoken';
 
 export default async (req: FastifyRequest, res: FastifyReply) => {
     if (!req.headers.authorization) return unauthorized(res, 'ERR.AUTHORIZATION.UNDEFINED', 'The authorization header was not provided.');

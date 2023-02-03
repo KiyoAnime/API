@@ -30,7 +30,7 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/auth/check', { preValidation: checkVal }, (req, res) => check(route, req, res));
     route.post('/auth/register', { preValidation: registerVal }, (req, res) => register(route, req, res));
 
-    route.get('/user', { preHandler: authorization },  (req, res) => user(route, req, res));
+    route.get('/user', { preHandler: authorization }, (req, res) => user(route, req, res));
     route.post('/user', { preHandler: authorization, preValidation: userUpdateVal }, (req, res) => userUpdate(route, req, res));
     route.post('/user/player', { preHandler: authorization, preValidation: playerUpdateVal }, (req, res) => playerUpdate(route, req, res));
 

@@ -11,8 +11,9 @@ import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction 
 const al = new META.Anilist();
 export type InfoRequest = FastifyRequest<{ Params: { id: string }; Querystring: { episodes: string; progress: string } }>;
 export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply) => {
-    await al.fetchAnimeInfo(req.params.id).then(async (info) => {
-        let anime: Anime|undefined = undefined;
+    // prettier-ignore
+    al.fetchAnimeInfo(req.params.id).then(async (info) => {
+        let anime: Anime | undefined = undefined;
         anime = {
             id: parseInt(info.id),
             title: (info.title as ITitle).romaji!,
@@ -30,7 +31,7 @@ export default async (app: FastifyInstance, req: InfoRequest, res: FastifyReply)
             start: { day: info.startDate?.day!, month: info.startDate?.month!, year: info.startDate?.year! },
             genres: info.genres!,
             mal: parseInt(info.malId as string),
-            titles: { ...info.title as ITitle },
+            titles: { ...(info.title as ITitle) },
             episodes: req.query.episodes === 'true' ? info.episodes! : undefined
         };
         if (req.query.progress) {

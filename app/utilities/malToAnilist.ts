@@ -1,7 +1,8 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default async (malId: number): Promise<number> => {
     return new Promise((resolve, reject) => {
+        // prettier-ignore
         axios({
             method: 'POST',
             url: 'https://graphql.anilist.co',
