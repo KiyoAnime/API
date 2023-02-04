@@ -5,7 +5,7 @@ import authorization from '@/middleware/authorization';
 import watch, { validation as watchVal } from '@/routes/watch';
 import search, { validation as searchVal } from '@/routes/search';
 import profile, { validation as profileVal } from '@/routes/profile';
-import { discord } from '@/routes/user/integrations';
+import { discord, discordCallback, discordVal } from '@/routes/user/integrations';
 import { info, order, recent, trending, infoVal, orderVal } from '@/routes/info';
 import { check, login, register, checkVal, loginVal, registerVal } from '@/routes/auth';
 import {
@@ -41,6 +41,7 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/user/progress', { preHandler: authorization, preValidation: progressVal }, (req, res) => progress(route, req, res));
     route.get('/user/sync', (req, res) => sync(route, req as UserSyncRequest, res));
     route.get('/user/integrations/discord', (req, res) => discord(route, req, res));
+    route.post('/user/integrations/discord', { preValidation: discordVal }, (req, res) => discordCallback(route, req, res));
 
     route.get('/info/recent', (req, res) => recent(route, req, res));
     route.get('/info/trending', (req, res) => trending(route, req, res));

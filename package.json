@@ -12,7 +12,8 @@
     "scripts": {
         "build": "tsc; tsc-alias",
         "lint": "prettier --write .",
-        "start": "node -r dotenv/config build/index.js",
+        "start:canary": "yarn run start --canary",
+        "start": "NODE_APP_INSTANCE=0 node -r dotenv/config build/index.js",
         "dev": "NODE_APP_INSTANCE=0 node -r tsconfig-paths/register -r dotenv/config -r ts-node/register index.ts --dev"
     },
     "dependencies": {
