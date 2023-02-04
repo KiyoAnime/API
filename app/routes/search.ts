@@ -15,7 +15,7 @@ export default (app: FastifyInstance, req: SearchRequest, res: FastifyReply) => 
     const page = req.query.page ? parseInt(req.query.page) : undefined;
     const genres = req.query.genres ? JSON.parse(req.query.genres) : undefined;
     // prettier-ignore
-    al.advancedSearch(req.query.query, 'ANIME', page, 25, undefined, undefined, genres).then((sR) => {
+    al.advancedSearch(req.query.query, 'ANIME', page, 30, undefined, undefined, genres).then((sR) => {
         const results: Results[] = [];
         for (const result of sR.results) results.push({
             id: parseInt(result.id),
