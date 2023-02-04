@@ -16,7 +16,7 @@ export default async (app: Instance) => {
 
 async function setRecent(app: Instance): Promise<void> {
     // prettier-ignore
-    await al.fetchRecentEpisodes('gogoanime', 1, 65).then(async (res) => {
+    await al.fetchRecentEpisodes('gogoanime', 1, 250).then(async (res) => {
         const recent: Recent[] = [];
         for (const ep of res.results) {
             const anime = await al.fetchAnilistInfoById(ep.id);
@@ -26,10 +26,10 @@ async function setRecent(app: Instance): Promise<void> {
                 thumbnail: anime.image!
             });
         }
-        const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 28);
+        const filteredRecent = [...new Map(recent.map((item) => [item['id'], item])).values()].slice(0, 84);
         app.redis.set('recent', JSON.stringify(filteredRecent));
     }).catch(() => {});
-}
+};
 
 async function setTrending(app: Instance): Promise<void> {
     // prettier-ignore
@@ -48,4 +48,4 @@ async function setTrending(app: Instance): Promise<void> {
         }
         app.redis.set('trending', JSON.stringify(trending));
     }).catch(() => {});
-}
+};
