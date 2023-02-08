@@ -16,7 +16,7 @@ export default async (app: Instance, req: DiscordCallbackRequest, res: FastifyRe
         redirect_uri: getCallback(),
         grant_type: 'authorization_code',
         client_id: config.get('discord.clientId'),
-        client_secret: process.env.DISCORD_CLIENT_SECRET!
+        client_secret: process.env.DISCORD_SECRET!
     });
     const oauthToken = await axios.post(`https://discord.com/api/v10/oauth2/token`, params);
     const info = await axios.get('https://discord.com/api/v10/users/@me', { headers: {

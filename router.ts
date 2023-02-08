@@ -23,7 +23,6 @@ import {
     configUpdateVal,
     designUpdateVal
 } from '@/routes/user';
-import sync, { UserSyncRequest } from '@/routes/sync';
 
 export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/auth/login', { preValidation: loginVal }, (req, res) => login(route, req, res));
@@ -39,7 +38,6 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
     route.post('/user/progress', { preHandler: authorization, preValidation: progressVal }, (req, res) => progress(route, req, res));
-    route.get('/user/sync', (req, res) => sync(route, req as UserSyncRequest, res));
     route.get('/user/integrations/discord', (req, res) => discord(route, req, res));
     route.post('/user/integrations/discord', { preValidation: discordVal }, (req, res) => discordCallback(route, req, res));
 
