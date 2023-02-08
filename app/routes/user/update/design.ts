@@ -8,16 +8,10 @@ export type DesignUpdateRequest = FastifyRequest<{ Body: { gradient: { start: st
 export default async (app: FastifyInstance, req: DesignUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
     // prettier-ignore
-    await User.updateOne(
-        { _id: user._id },
-        { profile: {
-            ...user.profile,
-            gradient: {
-                start: req.body.gradient.start,
-                end: req.body.gradient.end
-            }
-        }}
-    );
+    await User.findByIdAndUpdate(user._id, { $set: {
+        'profile.gradient.end': req.body.gradient.end,
+        'profile.gradient.start': req.body.gradient.start
+    }});
     return success(res, null);
 };
 

@@ -1,5 +1,6 @@
 import User from '@/models/User';
 import badRequest from '@/res/badRequest';
+import success from '@/res/success';
 import getUser from '@/utilities/getUser';
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from 'fastify';
 
@@ -12,14 +13,11 @@ export type PlayerUpdateRequest = FastifyRequest<{
 export default async (app: Instance, req: PlayerUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
     // prettier-ignore
-    await User.updateOne(
-        { _id: user._id },
-        { config: {
-            ...user.config,
-            autoNext: req.body.autoNext,
-            autoSkip: req.body.autoSkip
-        }}
-    );
+    await User.findByIdAndUpdate(user._id, { $set: {
+        'config.autoNext': req.body.autoNext,
+        'config.autoSkip': req.body.autoSkip
+    }});
+    return success(res, null);
 };
 
 export const validation = (req: PlayerUpdateRequest, res: FastifyReply, next: HookHandlerDoneFunction) => {

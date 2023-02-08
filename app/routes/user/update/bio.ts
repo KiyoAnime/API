@@ -7,7 +7,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction 
 export type BioUpdateRequest = FastifyRequest<{ Body: { bio: string } }>;
 export default async (app: FastifyInstance, req: BioUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
-    await User.updateOne({ _id: user._id }, { profile: { ...user.profile, bio: req.body.bio } });
+    await User.findByIdAndUpdate(user._id, { $set: { 'profile.bio': req.body.bio } });
     return success(res, null);
 };
 

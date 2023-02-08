@@ -13,14 +13,11 @@ export type UserUpdateRequest = FastifyRequest<{
 }>;
 export default async (app: FastifyInstance, req: UserUpdateRequest, res: FastifyReply) => {
     const user = await getUser(req);
-    await User.updateOne(
-        { _id: user?._id },
-        {
-            email: req.body.email,
-            avatar: req.body.avatar,
-            profileName: req.body.profileName
-        }
-    );
+    await User.findByIdAndUpdate(user._id, { $set: {
+        email: req.body.email,
+        avatar: req.body.avatar,
+        profileName: req.body.profileName
+    }});
     return success(res, null);
 };
 
