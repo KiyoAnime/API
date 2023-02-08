@@ -11,17 +11,20 @@ import { check, login, register, checkVal, loginVal, registerVal } from '@/route
 import {
     user,
     progress,
+    watchlist,
     bioUpdate,
     userUpdate,
     playerUpdate,
     configUpdate,
     designUpdate,
+    watchlistUpdate,
     progressVal,
     bioUpdateVal,
     userUpdateVal,
     playerUpdateVal,
     configUpdateVal,
-    designUpdateVal
+    designUpdateVal,
+    watchlistUpdateVal
 } from '@/routes/user';
 
 export default async (route: Instance, opts: FastifyPluginOptions) => {
@@ -32,12 +35,15 @@ export default async (route: Instance, opts: FastifyPluginOptions) => {
     route.get('/user', { preHandler: authorization }, (req, res) => user(route, req, res));
     route.post('/user', { preHandler: authorization, preValidation: userUpdateVal }, (req, res) => userUpdate(route, req, res));
     route.post('/user/player', { preHandler: authorization, preValidation: playerUpdateVal }, (req, res) => playerUpdate(route, req, res));
+    route.post('/user/progress', { preHandler: authorization, preValidation: progressVal }, (req, res) => progress(route, req, res));
+    route.get('/user/watchlist', { preHandler: authorization }, (req, res) => watchlist(route, req, res));
+    route.put('/user/watchlist', { preHandler: authorization, preValidation: watchlistUpdateVal }, (req, res) => watchlistUpdate(route, req, res));
 
     route.get('/user/profile/:user', { preValidation: profileVal }, (req, res) => profile(route, req, res));
     route.post('/user/profile/bio', { preHandler: authorization, preValidation: bioUpdateVal }, (req, res) => bioUpdate(route, req, res));
     route.post('/user/profile/config', { preHandler: authorization, preValidation: configUpdateVal }, (req, res) => configUpdate(route, req, res));
     route.post('/user/profile/design', { preHandler: authorization, preValidation: designUpdateVal }, (req, res) => designUpdate(route, req, res));
-    route.post('/user/progress', { preHandler: authorization, preValidation: progressVal }, (req, res) => progress(route, req, res));
+
     route.get('/user/integrations/discord', (req, res) => discord(route, req, res));
     route.post('/user/integrations/discord', { preValidation: discordVal }, (req, res) => discordCallback(route, req, res));
 

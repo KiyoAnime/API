@@ -18,4 +18,4 @@ const progressSchema = new Schema<ProgressI, ProgressModel>({
     progress: { required: true, type: Number }
 }, { timestamps: true });
 
-export default model('progress', progressSchema);
+export default model('progresses', progressSchema);
